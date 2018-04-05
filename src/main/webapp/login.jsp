@@ -9,7 +9,8 @@
       <div class="form-label-group">
         <input type="text" class="form-control"
                name="usuario" 
-               placeholder="Nombre Usuario" 
+               placeholder="Nombre Usuario"
+               value="admin" 
                required autofocus>
                
         <label for="usuario">Nombre Usuario</label>
@@ -19,7 +20,9 @@
         <input type="password" 
                name="password" 
                class="form-control" 
-               placeholder="Contraseña" required>
+               placeholder="Contraseña" 
+               value="admin"
+               required>
                
         <label for="password">Contraseña</label>
       </div>

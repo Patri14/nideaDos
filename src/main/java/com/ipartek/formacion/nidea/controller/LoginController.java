@@ -26,7 +26,8 @@ public class LoginController extends HttpServlet {
 	private static final String USER = "admin";
 	private static final String PASS = "admin";
 
-	private static final int SESSION_EXPIRATION = 60 * 1; // 1 minuto
+	// private static final int SESSION_EXPIRATION = 60 * 1; // 1 minuto
+	private static final int SESSION_EXPIRATION = -1;// asi no expira nunca
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -65,9 +66,7 @@ public class LoginController extends HttpServlet {
 				 * tiempo de duración de la sesión, también se puede configurar en el xml del un
 				 * valor negativo indica que nunca expira
 				 *
-				 * <session-config> 
-				 * 	<session-timeout>-1</session-timeout> 
-				 * </session-config>
+				 * <session-config> <session-timeout>-1</session-timeout> </session-config>
 				 *
 				 * WEB.XML
 				 */

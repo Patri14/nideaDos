@@ -1,6 +1,5 @@
 package com.ipartek.formacion.nidea;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -9,8 +8,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import org.junit.Test;
-
-import com.ipartek.formacion.nidea.model.MaterialDAO;
 
 public class DataBaseTest {
 
@@ -42,12 +39,12 @@ public class DataBaseTest {
 
 	}
 
-	@Test
-	public void testMaterailDAO() {
-
-		MaterialDAO dao = MaterialDAO.getInstance();
-		assertNotNull(dao.getAll());
-
-	}
+	// @Test
+	// public void testMaterailDAO() {
+	//
+	// MaterialDAO dao = MaterialDAO.getInstance();
+	// assertNotNull(dao.getAll());
+	//
+	// }
 
 }
