@@ -4,18 +4,27 @@
 <%@include file="/templates/alert.jsp"%>
 
 <div class="table-wrapper">
- 	<div class="table-title">
+	<div class="table-title">
        <div class="row">
 	        <div class="col-sm-6">
 				<h2>Materiales Backoffice</h2>
 			</div>
+			
+			<div class="col-sm-6">
+				<a href="backoffice/materiales?op=<%=MaterialesController.OP_MOSTRAR_FORMULARIO%>" class="btn btn-success">
+				<i class="material-icons">&#xE147;</i> <span>CREAR NUEVO MATERIAL</span></a>
+			</div>
 			<!-- buscador -->
-			<form action="backoffice/materiales" method="get">
-				<input type="hidden" name="op" value="<%=MaterialesController.OP_BUSQUEDA%>">
-				<input type="text" name="search" required placeholder="Nombre del material">
-				<input type="submit" value="buscar">
-			</form>
-       </div><!-- end row -->
+			<div class="col-md-12 table-filter">
+				<form action="backoffice/materiales" method="get">
+					<input type="hidden" name="op" value="<%=MaterialesController.OP_BUSQUEDA%>">
+					<input class="busqueda_material" type="text" name="search" required placeholder="Nombre del material">
+					<input class="btn_buscar" type="submit" value="buscar">
+				</form>
+			</div>
+		</div>
+	</div><!-- end row -->
+     
     </div><!-- end table title -->
 	<table id="tablaMateriales" class="table table-striped table-bordered table-hover" style="width:100%">
 	    <thead>

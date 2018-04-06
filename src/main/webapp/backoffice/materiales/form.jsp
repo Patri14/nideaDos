@@ -14,31 +14,42 @@ ${material}
 					<div class="col-lg-12">
 						<div class="form-group">
 							<label for="name">ID</label>
-							<input type="text" id="name" name="id" class="form-control">
+							<input type="text" id="name" name="id" class="form-control" value="${material.id}">
 						</div>
 						<div class="form-group">
 							<label for="email">NOMBRE</label>
-							<input type="email" id="email" name="nombre" class="form-control">
+							<input type="text" id="email" name="nombre" class="form-control" value="${material.nombre}">
 						</div>
 						<div class="form-group">
 							<label for="subject">PRECIO</label>
-							<input type="text" id="subject" name="precio" class="form-control">
+							<input type="text" id="subject" name="precio" class="form-control" value="${material.precio}">
 						</div>
 					</div>
+					<!--  btn crear -->
 					<div class="col-lg-12">
 					<c:if test ="${material.id == -1}">
-						<div class="form-group">
-							<a href="backoffice/materiales?id=${material.id}&op=<%=MaterialesController.OP_GUARDAR%>" class="btn btn-primary" id="btn_crear">Crear</a>
+						<div class="form-group row">
+							<input type="hidden" value="backoffice/materiales?id=${material.id}&op=<%=MaterialesController.OP_GUARDAR%>">
+							<button class="btn btn-primary" id="btn_crear">Crear</button>
 						</div>
 					</c:if>
 					</div>
+					
+					<!--  btn modificar y borrar -->
 					<div class="col-lg-12">
 					<c:if test ="${material.id > -1}">
-						<div class="form-group">
-						  <a href="backoffice/materiales?id=${material.id}&op=<%=MaterialesController.OP_GUARDAR%>" class="btn btn-primary" id="btn_crear">
-						  	Modificar</a>
-						  <a href="backoffice/materiales?id=${material.id}&op=<%=MaterialesController.OP_ELIMINAR%>" class="btn btn-primary" id="btn_crear">
-						  Borrar</a>
+						<div class="form-group row">
+						
+							<div class="col-md-6">
+								 <input type="hidden" name="op" value="<%=MaterialesController.OP_GUARDAR%>"> 
+							  <button type="submit" class="btn btn-primary" id="btn_crear">
+							  	Modificar</button>
+						  	</div>
+						  	
+						  	<div class="col-md-6">
+							  <a href="backoffice/materiales?id=${material.id}&op=<%=MaterialesController.OP_ELIMINAR%>" class="btn btn-warning" id="btn_crear">
+							  Borrar</a>
+						  </div>
 						</div>
 					</c:if>
 					</div>

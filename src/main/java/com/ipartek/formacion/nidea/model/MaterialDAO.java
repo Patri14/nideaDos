@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import com.ipartek.formacion.nidea.pojo.Material;
 
-public class MaterialDAO {
+public class MaterialDAO implements Persistible<Material> {
 
 	private static MaterialDAO INSTANCE = null;
 
@@ -47,6 +47,10 @@ public class MaterialDAO {
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 
+		int id;
+		String nombre;
+		float precio;
+
 		try {
 
 			/*
@@ -56,7 +60,7 @@ public class MaterialDAO {
 			 */
 
 			con = ConnectionManager.getConnection();
-			String sql = "SELECT id, nombre, precio FROM spoty.material;";
+			String sql = "SELECT id, nombre, precio FROM nidea.material;";
 
 			pst = con.prepareStatement(sql);
 			rs = pst.executeQuery();
@@ -105,7 +109,7 @@ public class MaterialDAO {
 
 			con = ConnectionManager.getConnection();
 
-			String sql = "SELECT id, nombre, precio FROM spoty.material " + "WHERE nombre like %" + search
+			String sql = "SELECT id, nombre, precio FROM nidea.material " + "WHERE nombre like %" + search
 					+ "% ORDER BY id DESC LIMIT 500;";
 
 			pst = con.prepareStatement(sql);
@@ -142,6 +146,134 @@ public class MaterialDAO {
 		}
 
 		return lista;
+	}
+
+	@Override
+	public ArrayList<Material> getById(int id) {
+		ArrayList<Material> lista = new ArrayList<Material>();
+		ResultSet rs = null;
+		Material material = null;
+		boolean resul = false;
+		Connection con = null;
+		PreparedStatement pst = null;
+
+		try {
+			con = ConnectionManager.getConnection();
+
+			String sql = "SELECT * FROM `articulos` WHERE `id`= ? ";
+
+			pst = con.prepareStatement(sql);
+
+			int affetedRows = pst.executeUpdate();
+
+			pst = con.prepareStatement(sql);
+			rs = pst.executeQuery();
+
+			Material m = null;
+			while (rs.next()) {
+				m = new Material();
+				m.setId(rs.getInt("id"));
+				m.setNombre(rs.getString("nombre"));
+				m.setPrecio(rs.getFloat("precio"));
+				lista.add(m);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+
+				if (pst != null) {
+					pst.close();
+				}
+
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return lista;
+	}
+
+	@Override
+	public boolean save(Material pojo) {
+		Material material = new Material();
+		boolean resul = false;
+		Connection con = null;
+		PreparedStatement pst = null;
+		try {
+
+			con = ConnectionManager.getConnection();
+
+			String sql = "UPDATE `material` SET `nombre`='?' WHERE  `id`=?;";
+
+			pst = con.prepareStatement(sql);
+			pst.setInt(1, material.getId());
+			pst.setString(2, material.getNombre());
+			pst.setFloat(3, material.getPrecio());
+
+			int affetedRows = pst.executeUpdate();
+
+			if (affetedRows == 1) {
+				resul = true;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+
+				if (pst != null) {
+					pst.close();
+				}
+
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return resul;
+	}
+
+	@Override
+	public boolean delete(int id) {
+		boolean resul = false;
+		Connection con = null;
+		PreparedStatement pst = null;
+		try {
+
+			con = ConnectionManager.getConnection();
+			String sql = "DELETE FROM `material` WHERE  `id`= ?;";
+
+			pst = con.prepareStatement(sql);
+			pst.setInt(1, id);
+
+			int affetedRows = pst.executeUpdate();
+
+			if (affetedRows == 1) {
+				resul = true;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+
+				if (pst != null) {
+					pst.close();
+				}
+
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return resul;
 	}
 
 }
