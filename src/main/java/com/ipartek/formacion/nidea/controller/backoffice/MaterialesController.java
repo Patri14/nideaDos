@@ -103,7 +103,7 @@ public class MaterialesController extends HttpServlet {
 				mostrarFormulario(request);
 				break;
 			case OP_ELIMINAR:
-				eliminar(request);
+				eliminar(request, response);
 				break;
 			case OP_BUSQUEDA:
 				buscar(request);
@@ -126,6 +126,9 @@ public class MaterialesController extends HttpServlet {
 
 			// dispatcher = request.getRequestDispatcher(VIEW_INDEX);
 			// materiales = dao.buscarMateriales(search);
+		} catch (NumberFormatException excepcion) {
+
+			alert = new Alert("Introduce un número", Alert.TIPO_WARNING);
 
 		} catch (Exception e) {
 			alert = new Alert();
@@ -141,44 +144,41 @@ public class MaterialesController extends HttpServlet {
 
 	}
 
+	/**
+	 * Creamos un nuevo material si su id es igual a -1 Modificamos un material en
+	 * caso contrario Y actualizamos el listado llamando al metodo
+	 * actualizarMaterial()
+	 */
 	private void guardar(HttpServletRequest request) {
 
 		Material material = new Material();
+		material.setId(id);
+		material.setNombre(nombre);
+		material.setPrecio(precio);
 
-		if (id == -1) {
-
-			id = Integer.parseInt(request.getParameter("id"));
-			nombre = request.getParameter("nombre");
-			precio = Float.parseFloat("precio");
+		if (precio > 0) {
 
 			if (dao.save(material)) {
-				alert = new Alert("Material Guardado id " + id, Alert.TIPO_PRIMARY);
-			} else {
-				alert = new Alert("Fallo al guardar el material ", Alert.TIPO_PRIMARY);
-			}
 
-			if (dao.delete(id)) {
-				alert = new Alert("Material Eliminado id " + id, Alert.TIPO_PRIMARY);
-			} else {
-				alert = new Alert("Error Eliminando, sentimos las molestias ", Alert.TIPO_WARNING);
+				alert = new Alert("Material guardado", Alert.TIPO_PRIMARY);
 			}
-			listar(request);
+		} else if (nombre == null || nombre.isEmpty()) {
+
+			alert = new Alert("Introduce un nombre para este material", Alert.TIPO_WARNING);
 
 		} else {
-
-			// he modificado el recurso
-			alert = new Alert("Modifico material " + id, Alert.TIPO_WARNING);
-			material.setId(id);
-			material.setNombre("Modificado");
-
+			alert = new Alert("Lo sentimos pero no hemos podido guardar el material", Alert.TIPO_WARNING);
 		}
-
 		request.setAttribute("material", material);
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 
 	}
 
+	/**
+	 * Busqueda de materiales por nombre
+	 */
 	private void buscar(HttpServletRequest request) {
+
 		alert = new Alert("Busqueda para: " + search, Alert.TIPO_PRIMARY);
 		ArrayList<Material> materiales = new ArrayList<Material>();
 		materiales = dao.getAll();
@@ -187,9 +187,11 @@ public class MaterialesController extends HttpServlet {
 
 	}
 
-	private void eliminar(HttpServletRequest request) {
+	private void eliminar(HttpServletRequest request, HttpServletResponse response) {
 		if (dao.delete(id)) {
 			alert = new Alert("Material Eliminado id " + id, Alert.TIPO_PRIMARY);
+			// para que nos varie del logout a login en la url
+
 		} else {
 			alert = new Alert("Error Eliminando, sentimos las molestias ", Alert.TIPO_WARNING);
 		}
@@ -211,7 +213,7 @@ public class MaterialesController extends HttpServlet {
 
 			// TODO recuperar de la BBDD que es un material que existe
 			alert = new Alert("Estoy en mostrar formulario Mostramos Detalle id:" + id, Alert.TIPO_WARNING);
-			material.setId(id);
+			material = dao.getById(id);
 
 		} else {
 			alert = new Alert("Nuevo Producto", Alert.TIPO_WARNING);
@@ -248,7 +250,8 @@ public class MaterialesController extends HttpServlet {
 		}
 
 		if (request.getParameter("nombre") != null) {
-			nombre = request.getParameter("nombre");
+			nombre = request.getParameter("nombre").trim();
+
 		} else {
 			nombre = "";
 		}

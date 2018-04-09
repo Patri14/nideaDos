@@ -43,56 +43,26 @@ public class MaterialDAO implements Persistible<Material> {
 	public ArrayList<Material> getAll() {
 
 		ArrayList<Material> lista = new ArrayList<Material>();
-		Connection con = null;
-		PreparedStatement pst = null;
-		ResultSet rs = null;
 
 		int id;
 		String nombre;
 		float precio;
 
-		try {
+		String sql = "SELECT id, nombre, precio FROM material;";
 
-			/*
-			 * Class.forName("com.mysql.jdbc.Driver"); final String URL =
-			 * "jdbc:mysql://192.168.0.42/spoty?user=alumno&password=alumno"; con =
-			 * DriverManager.getConnection(URL);
-			 */
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 
-			con = ConnectionManager.getConnection();
-			String sql = "SELECT id, nombre, precio FROM nidea.material;";
+			try (ResultSet rs = pst.executeQuery();) {
 
-			pst = con.prepareStatement(sql);
-			rs = pst.executeQuery();
-
-			Material m = null;
-			while (rs.next()) {
-				m = new Material();
-				m.setId(rs.getInt("id"));
-				m.setNombre(rs.getString("nombre"));
-				m.setPrecio(rs.getFloat("precio"));
-				lista.add(m);
+				Material m = null;
+				while (rs.next()) {
+					m = mapper(rs);
+					lista.add(m);
+				}
 			}
-
 		} catch (Exception e) {
+
 			e.printStackTrace();
-		} finally {
-
-			try {
-				if (rs != null) {
-					rs.close();
-				}
-
-				if (pst != null) {
-					pst.close();
-				}
-
-				if (con != null) {
-					con.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		}
 
 		return lista;
@@ -101,141 +71,127 @@ public class MaterialDAO implements Persistible<Material> {
 	public ArrayList<Material> buscarMateriales(String search) {
 
 		ArrayList<Material> lista = new ArrayList<Material>();
-		Connection con = null;
-		PreparedStatement pst = null;
-		ResultSet rs = null;
 
-		try {
+		String sql = "SELECT id, nombre, precio FROM nidea.material " + "WHERE nombre like %" + search
+				+ "% ORDER BY id DESC LIMIT 500;";
 
-			con = ConnectionManager.getConnection();
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 
-			String sql = "SELECT id, nombre, precio FROM nidea.material " + "WHERE nombre like %" + search
-					+ "% ORDER BY id DESC LIMIT 500;";
+			try (ResultSet rs = pst.executeQuery();) {
 
-			pst = con.prepareStatement(sql);
-			rs = pst.executeQuery();
-
-			Material m = null;
-			while (rs.next()) {
-				m = new Material();
-				m.setId(rs.getInt("id"));
-				m.setNombre(rs.getString("nombre"));
-				m.setPrecio(rs.getFloat("precio"));
-				lista.add(m);
+				Material m = null;
+				while (rs.next()) {
+					m = mapper(rs);
+					lista.add(m);
+				}
 			}
-
 		} catch (Exception e) {
+
 			e.printStackTrace();
-		} finally {
-
-			try {
-				if (rs != null) {
-					rs.close();
-				}
-
-				if (pst != null) {
-					pst.close();
-				}
-
-				if (con != null) {
-					con.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		}
 
 		return lista;
 	}
 
 	@Override
-	public ArrayList<Material> getById(int id) {
-		ArrayList<Material> lista = new ArrayList<Material>();
-		ResultSet rs = null;
+	public Material getById(int id) {
 		Material material = null;
-		boolean resul = false;
-		Connection con = null;
-		PreparedStatement pst = null;
+		String sql = "SELECT `id`, `nombre`, `precio` FROM `material` WHERE `id` = ? ;";
 
-		try {
-			con = ConnectionManager.getConnection();
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+			pst.setInt(1, id);
+			try (ResultSet rs = pst.executeQuery()) {
+				while (rs.next()) {
+					material = mapper(rs);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return material;
+	}
 
-			String sql = "SELECT * FROM `articulos` WHERE `id`= ? ";
+	@Override
+	public boolean save(Material material) {
 
-			pst = con.prepareStatement(sql);
+		boolean result = false;
 
+		if (material != null) {
+			if (material.getId() == -1) {
+				result = crear(material);
+			} else {
+				result = modificar(material);
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 * Modificar material
+	 */
+
+	private boolean modificar(Material material) {
+		boolean result = false;
+		String sql = "UPDATE `material` SET `nombre`=?, `precio`=? WHERE  `id`=?;";
+
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+
+			pst.setString(1, material.getNombre());// El nombre el primer interrogante, es un String.
+			pst.setFloat(2, material.getPrecio());// El precio es el segundo interrogante
+			pst.setFloat(3, material.getId());
+
+			// si el numero de filas afectadas es igual a 1 es que solo he modificado un
+			// registro
+			// ejecuto la inserccion
 			int affetedRows = pst.executeUpdate();
 
-			pst = con.prepareStatement(sql);
-			rs = pst.executeQuery();
-
-			Material m = null;
-			while (rs.next()) {
-				m = new Material();
-				m.setId(rs.getInt("id"));
-				m.setNombre(rs.getString("nombre"));
-				m.setPrecio(rs.getFloat("precio"));
-				lista.add(m);
+			if (affetedRows == 1) {
+				result = true;
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-
-				if (pst != null) {
-					pst.close();
-				}
-
-				if (con != null) {
-					con.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		}
-		return lista;
+
+		return result;
+
 	}
 
-	@Override
-	public boolean save(Material pojo) {
-		Material material = new Material();
-		boolean resul = false;
-		Connection con = null;
-		PreparedStatement pst = null;
-		try {
+	/**
+	 * Crear material
+	 */
+	private boolean crear(Material material) {
+		boolean result = false;
+		String sql = "INSERT INTO `material` (`nombre`, `precio`) VALUES (?, ?);";
 
-			con = ConnectionManager.getConnection();
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);) {
 
-			String sql = "UPDATE `material` SET `nombre`='?' WHERE  `id`=?;";
-
-			pst = con.prepareStatement(sql);
-			pst.setInt(1, material.getId());
-			pst.setString(2, material.getNombre());
-			pst.setFloat(3, material.getPrecio());
+			pst.setString(1, material.getNombre());// El nombre el primer interrogante, es un String.
+			pst.setFloat(2, material.getPrecio());// El precio es el segundo interrogante
 
 			int affetedRows = pst.executeUpdate();
 
 			if (affetedRows == 1) {
-				resul = true;
+				// recuperar ID generado de forma automatica
+				try (ResultSet rs = pst.getGeneratedKeys()) {
+
+					while (rs.next()) {
+						material.setId(rs.getInt(1));
+						// int claveGenerada = rs.getInt(1);
+						result = true;
+					}
+				}
+
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-
-				if (pst != null) {
-					pst.close();
-				}
-
-				if (con != null) {
-					con.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		}
-		return resul;
+
+		return result;
+
 	}
 
 	@Override
@@ -246,7 +202,7 @@ public class MaterialDAO implements Persistible<Material> {
 		try {
 
 			con = ConnectionManager.getConnection();
-			String sql = "DELETE FROM `material` WHERE  `id`= ?;";
+			String sql = "DELETE FROM `material` WHERE `id`= ?;";
 
 			pst = con.prepareStatement(sql);
 			pst.setInt(1, id);
@@ -274,6 +230,19 @@ public class MaterialDAO implements Persistible<Material> {
 			}
 		}
 		return resul;
+	}
+
+	@Override
+	public Material mapper(ResultSet rs) throws SQLException {
+		Material m = null;
+		if (rs != null) {
+			m = new Material();
+			m.setId(rs.getInt("id"));
+			m.setNombre(rs.getString("nombre"));
+			m.setPrecio(rs.getFloat("precio"));
+
+		}
+		return m;
 	}
 
 }
