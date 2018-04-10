@@ -3,9 +3,9 @@ package com.ipartek.formacion.nidea.ejemplos;
 public class EjercicioVehiculos {
 
 	public static void main(String[] args) {
-
-		Vehiculo rayoMcQueen = new Vehiculo();
-		System.out.println("Soy RAYOMcQEEN " + rayoMcQueen.toString());
+		// NO SE PUEDEN CREAR OBJETOS DE UNA CLASE ABSTRACTA
+		// Vehiculo rayoMcQueen = new Vehiculo();
+		// System.out.println("Soy RAYOMcQEEN " + rayoMcQueen.toString());
 
 		System.out.println("------------------------------------");
 
