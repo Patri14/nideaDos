@@ -239,8 +239,11 @@ table.table .avatar {
 	float:right;
 }
 	
-	/*Backoffice form detalle materiales
+/*Backoffice form detalle materiales
 	************************************/
+.btn-volver{
+	margin: 0 auto;
+}
 	
 .materiales_form{
 	width: 40%;

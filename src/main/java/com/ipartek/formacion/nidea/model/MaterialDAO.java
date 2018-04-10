@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
 import com.ipartek.formacion.nidea.pojo.Material;
@@ -72,11 +73,11 @@ public class MaterialDAO implements Persistible<Material> {
 
 		ArrayList<Material> lista = new ArrayList<Material>();
 
-		String sql = "SELECT id, nombre, precio FROM nidea.material " + "WHERE nombre like %" + search
-				+ "% ORDER BY id DESC LIMIT 500;";
+		String sql = "SELECT id, nombre, precio FROM nidea.material WHERE nombre like ? ORDER BY id DESC LIMIT 500;";
 
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 
+			pst.setString(1, "%" + search + "%");
 			try (ResultSet rs = pst.executeQuery();) {
 
 				Material m = null;
@@ -112,7 +113,7 @@ public class MaterialDAO implements Persistible<Material> {
 	}
 
 	@Override
-	public boolean save(Material material) {
+	public boolean save(Material material) throws SQLIntegrityConstraintViolationException {
 
 		boolean result = false;
 
@@ -161,7 +162,7 @@ public class MaterialDAO implements Persistible<Material> {
 	/**
 	 * Crear material
 	 */
-	private boolean crear(Material material) {
+	private boolean crear(Material material) throws SQLIntegrityConstraintViolationException {
 		boolean result = false;
 		String sql = "INSERT INTO `material` (`nombre`, `precio`) VALUES (?, ?);";
 

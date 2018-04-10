@@ -5,7 +5,7 @@
 <%@include file="/templates/alert.jsp" %>
 
 <div class="row">
-	<div class="form-group row">
+	<div class="form-group row btn-volver">
 		<a class="btn btn-outline-dark btn-lg" href="backoffice/materiales">Volver</a>
 	</div>
 </div>
@@ -55,35 +55,33 @@
 						</div>
 						<!--  btn borrar -->
 						<div class="col-md-6">
-						  <a href="backoffice/materiales?id=${material.id}&op=<%=MaterialesController.OP_ELIMINAR%>&id=${material.id}" class="btn btn-warning" id="btn_crear">
-						  Borrar</a>
+						  <button type="button" class="btn btn-warning" id="btn_crear" data-toggle="modal" data-target="#miModal">Eliminar</button>
 						</div>
-					  
 					</div>
 				</c:if>
 				</div>
-				<!-- Delete Modal HTML -->
-				<div id="deleteEmployeeModal" class="modal fade">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<form>
-								<div class="modal-header">						
-									<h4 class="modal-title">Delete Employee</h4>
-									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								</div>
-								<div class="modal-body">					
-									<p>Are you sure you want to delete these Records?</p>
-									<p class="text-warning"><small>This action cannot be undone.</small></p>
-								</div>
-								<div class="modal-footer">
-									<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-									<input type="submit" class="btn btn-danger" value="Delete">
-								</div>
-							</form>
-						</div>
+				
+				<!-- Modal btn borrar -->
+				<div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				  <div class="modal-dialog" role="document">
+				    <div class="modal-content">
+				    <div class="modal-header">						
+						<h4 class="modal-title">Eliminar material</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 					</div>
-				</div>
-					
+					<div class="modal-body">					
+						<p>¿ Seguro/a que quieres eliminar este material?</p>
+						<p><small>Esta acción no puede deshacerse.</small></p>
+					</div>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+						
+						<a href="backoffice/materiales?id=${material.id}&op=<%=MaterialesController.OP_ELIMINAR%>&id=${material.id}" class="btn btn-danger">
+						  Borrar</a>
+					</div>
+				    </div>
+				  </div>
+				</div>	
 			</div><!--end row -->
 		</div><!--end form-group -->
 	 </form><!--end form -->

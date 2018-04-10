@@ -1,6 +1,7 @@
 package com.ipartek.formacion.nidea.controller.backoffice;
 
 import java.io.IOException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
@@ -43,6 +44,7 @@ public class MaterialesController extends HttpServlet {
 	// parámetros del material
 	private int id;
 	private String nombre;
+	private String sPrecio;
 	private float precio;
 
 	// se ejecuta solo la primera vez que se llama al servlet
@@ -63,9 +65,9 @@ public class MaterialesController extends HttpServlet {
 	protected void service(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		System.out.println("antes de ejecutar doGet() o doPost()");
+		// System.out.println("antes de ejecutar doGet() o doPost()");
 		super.service(request, response); // llama a doGet() o a doPOst()
-		System.out.println("despues de ejecutar doGet() o doPost()");
+		// System.out.println("despues de ejecutar doGet() o doPost()");
 
 	}
 
@@ -116,19 +118,16 @@ public class MaterialesController extends HttpServlet {
 				break;
 			}
 
-			ArrayList<Material> materiales = new ArrayList<Material>();
-			String search = request.getParameter("search");
-			System.out.println("filtro de busqueda= " + search);
+			// ArrayList<Material> materiales = new ArrayList<Material>();
+			// String search = request.getParameter("search");
+			// System.out.println("filtro de busqueda= " + search);
 
 			// enviar como atributo la lista de materiales
-			MaterialDAO dao = MaterialDAO.getInstance();
-			materiales = dao.getAll();
+			// MaterialDAO dao = MaterialDAO.getInstance();
+			// materiales = dao.getAll();
 
 			// dispatcher = request.getRequestDispatcher(VIEW_INDEX);
 			// materiales = dao.buscarMateriales(search);
-		} catch (NumberFormatException excepcion) {
-
-			alert = new Alert("Introduce un número", Alert.TIPO_WARNING);
 
 		} catch (Exception e) {
 			alert = new Alert();
@@ -138,7 +137,7 @@ public class MaterialesController extends HttpServlet {
 			op = 0;
 
 			request.setAttribute("alert", alert);
-			// request.setAttribute("materiales", materiales);
+			// quest.setAttribute("materiales", materiales);
 			dispatcher.forward(request, response);
 		}
 
@@ -150,29 +149,57 @@ public class MaterialesController extends HttpServlet {
 	 * actualizarMaterial()
 	 */
 	private void guardar(HttpServletRequest request) {
-
 		Material material = new Material();
-		material.setId(id);
-		material.setNombre(nombre);
-		material.setPrecio(precio);
+		try {
 
-		if (precio > 0) {
+			material.setId(id);
+			material.setNombre(nombre);
+			precio = Float.parseFloat(sPrecio);
+			material.setPrecio(precio);
 
-			if (dao.save(material)) {
+			if (precio < 0) {
 
-				alert = new Alert("Material guardado", Alert.TIPO_PRIMARY);
-			}
-		} else if (nombre == null || nombre.isEmpty()) {
+				alert = new Alert("Introduce un precio mayor que 0", Alert.TIPO_WARNING);
 
-			alert = new Alert("Introduce un nombre para este material", Alert.TIPO_WARNING);
+			} else if (nombre == null || nombre.isEmpty()) {
 
-		} else {
-			alert = new Alert("Lo sentimos pero no hemos podido guardar el material", Alert.TIPO_WARNING);
+				alert = new Alert("Introduce un nombre para este material", Alert.TIPO_WARNING);
+
+			} else if (nombre.length() > 45) {
+
+				alert = new Alert("El nombre que has introducido es demasiado largo", Alert.TIPO_WARNING);
+
+			} else {
+
+				if (id == -1) {
+					if (dao.save(material)) {
+						alert = new Alert("Material nuevo guardado", Alert.TIPO_PRIMARY);
+					} else {
+						alert = new Alert("No se puedo guardar el nuevo material", Alert.TIPO_WARNING);
+					}
+				} else {
+					if (dao.save(material)) {
+						alert = new Alert("Modificado material con id " + id, Alert.TIPO_PRIMARY);
+					} else {
+						alert = new Alert("No se puedo modificar el material", Alert.TIPO_WARNING);
+					}
+				} // fin else material modificado
+			} // fin save material
+
+		} catch (SQLIntegrityConstraintViolationException e) {
+
+			alert = new Alert("El material ya existe en la base de datos", Alert.TIPO_WARNING);
 		}
+
+		catch (NumberFormatException e) {
+
+			alert = new Alert("El formato de precio no puede contener letras", Alert.TIPO_WARNING);
+		}
+
 		request.setAttribute("material", material);
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 
-	}
+	}// fin guardar()
 
 	/**
 	 * Busqueda de materiales por nombre
@@ -181,7 +208,7 @@ public class MaterialesController extends HttpServlet {
 
 		alert = new Alert("Busqueda para: " + search, Alert.TIPO_PRIMARY);
 		ArrayList<Material> materiales = new ArrayList<Material>();
-		materiales = dao.getAll();
+		materiales = dao.buscarMateriales(search);
 		request.setAttribute("materiales", materiales);
 		dispatcher = request.getRequestDispatcher(VIEW_INDEX);
 
@@ -257,11 +284,8 @@ public class MaterialesController extends HttpServlet {
 		}
 
 		if (request.getParameter("precio") != null) {
-			precio = Float.parseFloat(request.getParameter("precio"));
-		} else {
-			precio = 0;
+			sPrecio = request.getParameter("precio");
 		}
-
 	}
 
 }
