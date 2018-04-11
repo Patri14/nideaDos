@@ -8,6 +8,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
 import com.ipartek.formacion.nidea.pojo.Material;
+import com.ipartek.formacion.nidea.util.Utilidades;
 
 public class MaterialDAO implements Persistible<Material> {
 
@@ -116,6 +117,9 @@ public class MaterialDAO implements Persistible<Material> {
 	public boolean save(Material material) throws SQLIntegrityConstraintViolationException {
 
 		boolean result = false;
+
+		// sanear el nombre
+		material.setNombre(Utilidades.limpiarEspacios(material.getNombre()));
 
 		if (material != null) {
 			if (material.getId() == -1) {
