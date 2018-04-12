@@ -9,7 +9,7 @@
 	</div>
 </div>
 <div class="materiales_form">
-	 <form action="login2" method="post">
+	 <form action="loginUserController" method="post">
 		<h2>Formulario Usuario</h2>
 		<hr>
 		<div class="form-group">

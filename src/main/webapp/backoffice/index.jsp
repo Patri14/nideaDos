@@ -12,24 +12,9 @@
 %>
 
 <ol>
-<c:forEach items="${materiales}" var="material" >
-	
-	
-		<c:choose>
-         
-         <c:when test = "${material.precio >= 6 && material.precio < 25}">
-           <li class="text-info">${material.nombre} - ${material.precio}</li>
-         </c:when>
-         
-         <c:when test = "${material.precio > 26}">
-            <li class="text-danger">${material.nombre} - ${material.precio}</li>
-         </c:when>
-         
-         <c:otherwise>
-           <li class="text-default">${material.nombre} - ${material.precio}</li>
-         </c:otherwise>
-      </c:choose>
- </c:forEach>
+<c:forEach items="${applicationScope.usuarios_conectados}" var="usuario" >
+	<li class="text-info">${usuario.key} - ${usuario.value}</li>
+  </c:forEach>
 </ol>
 
 

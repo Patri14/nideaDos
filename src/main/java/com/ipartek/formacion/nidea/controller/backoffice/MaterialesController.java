@@ -3,11 +3,9 @@ package com.ipartek.formacion.nidea.controller.backoffice;
 import java.io.IOException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -97,18 +95,6 @@ public class MaterialesController extends HttpServlet {
 			throws ServletException, IOException {
 
 		alert = null;
-
-		ServletContext aplicacion = request.getServletContext();// pilla contexto
-		HashMap<Integer, String> usuarios = (HashMap<Integer, String>) aplicacion.getAttribute("usuarios_conectados");
-		// pilla atributos
-
-		if (usuarios == null) {
-			usuarios = new HashMap<Integer, String>();
-		}
-
-		usuarios.put(3, "nombreParameter");// meto al usuario dentro del hasMap
-
-		aplicacion.setAttribute("usuarios_conectados", usuarios);
 
 		try {
 
