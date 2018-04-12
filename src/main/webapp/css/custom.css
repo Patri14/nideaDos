@@ -12,6 +12,16 @@ svg{
 	margin: auto;
 }
 
+/* Navbar
+*****************************************/
+#app{
+	border-bottom: 1px solid #8080808C;
+}
+
+.nav-item{
+	margin-right:10px;
+}
+
 /* login
 *****************************************/
 #login{
