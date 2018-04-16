@@ -9,9 +9,10 @@
   <fieldset>
     <h2 class="form-title">Crear cuenta</h2>
     
-    <input type="text" name="id" placeholder="Id" />
     <input type="text" name="nombre" placeholder="Nombre" />
-   
+<!--<input type="text" name="id" placeholder="Id" /> -->
+    <input type="password" name="psw" placeholder="Contraseña" />
+    
    <button class="next action-button">Guardar</button>
 	
   </fieldset>

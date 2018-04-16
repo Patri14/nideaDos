@@ -20,11 +20,27 @@ svg{
 
 .nav-item{
 	margin-right:10px;
+	font-size: 1.2em;
+    text-transform: uppercase;
 }
 
-.admin{
-	border: 1px solid grey;
-    padding: 5px;
+.navbar-login
+{
+    width: 100%;
+    padding: 10px;
+    padding-bottom: 0px;
+}
+
+.navbar-login-session
+{
+    padding: 10px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+}
+
+.icon-size
+{
+    font-size: 87px;
 }
 
 /* login
@@ -353,7 +369,7 @@ label {
 /*buttons*/
 #msform .action-button {
 	width: 100px;
-	background: #27AE60;
+	background: #0060A9;
 	font-weight: bold;
 	color: white;
 	border: 0 none;
@@ -363,7 +379,7 @@ label {
 	margin: 10px 5px;
 }
 #msform .action-button:hover, #msform .action-button:focus {
-	box-shadow: 0 0 0 2px white, 0 0 0 3px #27AE60;
+	box-shadow: 0 0 0 2px white, 0 0 0 3px #0060A9;
 }
 
 .form-title {

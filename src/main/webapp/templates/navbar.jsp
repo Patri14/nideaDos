@@ -23,13 +23,48 @@
             </ul>
             <ul class="navbar-nav">
               
-                <li class="nav-item admin">
-                    <a class="btn btn-warning" href="Login2">Usuario</a>
-                    	
+<!--<li class="nav-item admin"> -->
+<!--  <a class="btn btn-warning" href="Login2">Usuario</a> -->
+                    
+                    <!-- drop down login usuario -->
+                    <li class="nav-item dropdown">
+                    <a href="#" class="dropdown-toggle btn btn-warning" data-toggle="dropdown">
+                       <i class="fa fa-user"></i>
+                        <strong>Usuario</strong>
+                        <span class="glyphicon glyphicon-chevron-down"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <div class="navbar-login">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <p class="text-left"><strong>Nombre</strong></p>
+                                        <p class="text-left small">id</p>
+                                        <p class="text-left">
+                                            <a href="Login2" class="btn btn-primary btn-block btn-sm">Registrarse</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="navbar-login navbar-login-session">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <p>
+                                            <a href="#" class="btn btn-danger btn-block">Cerrar Sesion</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                     </ul>
+                     <!-- fin drop down login usuario -->	
                 </li>
-                <li class="nav-item admin">
+                <li class="nav-item">
                   	<c:if test ="${empty usuario}">
-		      			<a class="btn btn-primary" href="login">Login</a>
+		      			<a class="btn btn-primary" href="login">Admin</a>
 		     		</c:if>
      
 			     	<c:if test ="${!empty usuario}">

@@ -74,7 +74,7 @@ public class MaterialDAO implements Persistible<Material> {
 
 		ArrayList<Material> lista = new ArrayList<Material>();
 
-		String sql = "SELECT id, nombre, precio FROM nidea.material WHERE nombre like ? ORDER BY id DESC LIMIT 500;";
+		String sql = "SELECT id, nombre, precio FROM nidea_ejercicio.material WHERE nombre like ? ORDER BY id DESC LIMIT 500;";
 
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 

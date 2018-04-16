@@ -20,4 +20,6 @@ setTimeout(function () { location.reload(1); }, 5000);
 </ol>
 
 
+
+
 <jsp:include page="/templates/footer.jsp"></jsp:include>

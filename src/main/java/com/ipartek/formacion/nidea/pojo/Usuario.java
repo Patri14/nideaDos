@@ -4,6 +4,7 @@ public class Usuario {
 
 	private int id;
 	private String nombre;
+	private String password;
 
 	public Usuario() {
 		super();
@@ -33,9 +34,17 @@ public class Usuario {
 		this.nombre = nombre;
 	}
 
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	@Override
 	public String toString() {
-		return "Ususario [id=" + id + ", nombre=" + nombre + "]";
+		return "Usuario [id=" + id + ", nombre=" + nombre + ", password=" + password + "]";
 	}
 
 }
