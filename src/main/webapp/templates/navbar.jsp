@@ -23,10 +23,11 @@
             </ul>
             <ul class="navbar-nav">
               
-                <li class="nav-item">
+                <li class="nav-item admin">
                     <a class="btn btn-warning" href="Login2">Usuario</a>
+                    	
                 </li>
-                <li class="nav-item">
+                <li class="nav-item admin">
                   	<c:if test ="${empty usuario}">
 		      			<a class="btn btn-primary" href="login">Login</a>
 		     		</c:if>

@@ -20,6 +20,9 @@ import javax.servlet.http.HttpSession;
 @WebFilter(dispatcherTypes = { DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.INCLUDE,
 		DispatcherType.ERROR }, description = "Dejar pasar solo a los usuarios Logeados", urlPatterns = {
 				"/backoffice/*" })
+
+// todo lo que vaya a backoffice a cualquier servleto jsp, tiene que pasar por
+// este filtro
 public class BackofficeFilter implements Filter {
 
 	/**
